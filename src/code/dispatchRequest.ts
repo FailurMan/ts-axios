@@ -1,8 +1,8 @@
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types/index'
+import { AxiosPromise, AxiosRequestConfig, AxiosResponse } from '../types'
+import xhr from './xhr'
 import { buildUrl } from '../helpers/url'
 import { transformRequest, transformResponse } from '../helpers/data'
 import { processHeaders } from '../helpers/headers'
-import xhr from './xhr'
 //主函数
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
   //处理config

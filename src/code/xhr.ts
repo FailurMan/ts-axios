@@ -1,6 +1,6 @@
 //实现请求逻辑
 
-import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types/index'
+import { AxiosRequestConfig, AxiosPromise, AxiosResponse } from '../types'
 import { parseHeaders } from '../helpers/headers'
 import { createError } from '../helpers/error'
 //发送请求模块

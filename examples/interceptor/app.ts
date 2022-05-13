@@ -1,5 +1,6 @@
 import axios from '../../src/index'
 
+//拦截器
 axios.interceptors.request.use(config => {
   config.headers.test += '1'
   return config
@@ -34,6 +35,6 @@ axios({
   headers: {
     test: ''
   }
-}).then((res) => {
+}).then(res => {
   console.log(res.data)
 })

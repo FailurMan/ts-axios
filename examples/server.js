@@ -35,7 +35,7 @@ app.use(
 )
 
 app.use(bodyParser.json())
-// app.use(bodyParser.text())
+app.use(bodyParser.text())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 
@@ -55,13 +55,13 @@ registerErrorRouter()
 
 registerExtendRouter()
 
-// registerInterceptorRouter()
+registerInterceptorRouter()
 
-// registerConfigRouter()
+registerConfigRouter()
 
-// registerCancelRouter()
+registerCancelRouter()
 
-// registerMoreRouter()
+registerMoreRouter()
 
 app.use(router)
 
