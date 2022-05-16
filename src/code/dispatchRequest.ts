@@ -3,6 +3,7 @@ import xhr from './xhr'
 import { buildUrl } from '../helpers/url'
 import { transformRequest, transformResponse } from '../helpers/data'
 import { processHeaders, flattenHeaders } from '../helpers/headers'
+import transform from './transform'
 //主函数
 export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromise {
   //处理config
@@ -15,9 +16,7 @@ function processConfig(config: AxiosRequestConfig): void {
   //处理URL数据
   //@ts-ignore
   config.url = transformURL(config)
-  config.headers = transformHeaders(config)
-  //处理Data数据
-  config.data = transformRequestData(config)
+  config.data = transform(config.data, config.headers, config.transformRequest)
   //再次处理请求头，删除不要的数据
   config.headers = flattenHeaders(config.headers, config.method!)
 }
@@ -26,18 +25,8 @@ function transformURL(config: AxiosRequestConfig): string | void {
   const { url, params } = config
   return buildUrl(url!, params)
 }
-//处理Data
-function transformRequestData(config: AxiosRequestConfig): any {
-  return transformRequest(config.data)
-}
-//处理headers
-function transformHeaders(config: AxiosRequestConfig): any {
-  const { headers = {}, data } = config
-
-  return processHeaders(headers, data)
-}
 //处理data
 function transformResponseData(res: AxiosResponse): AxiosResponse {
-  res.data = transformResponse(res.data)
+  res.data = transform(res.data, res.headers, res.config.transformResponse)
   return res
 }
