@@ -14,42 +14,46 @@ function normalizeHeaderName(headers: any, normalizeHeaderName: string): void {
 }
 
 export function processHeaders(headers: any, data: any): any {
-  normalizeHeaderName(headers, 'Content-type')
+  normalizeHeaderName(headers, 'Content-Type')
+
   if (isPlainObject(data)) {
-    if (headers && !headers['Content-type']) {
-      headers['Content-type'] = 'application/json;charset=utf-8'
+    if (headers && !headers['Content-Type']) {
+      headers['Content-Type'] = 'application/json;charset=utf-8'
     }
   }
   return headers
 }
 //将header转换成对象格式
-export function parseHeaders(headers: string): string {
+export function parseHeaders(headers: string): any {
   let parsed = Object.create(null)
   if (!headers) {
     return parsed
   }
+
   headers.split('\r\n').forEach(line => {
-    let [key, val] = line.split(':')
-    key = key.trim().toLocaleUpperCase()
+    let [key, ...vals] = line.split(':')
+    key = key.trim().toLowerCase()
     if (!key) {
       return
     }
-    if (val) {
-      val = val.trim()
-    }
+    let val = vals.join(':').trim()
     parsed[key] = val
   })
+
   return parsed
 }
 
 export function flattenHeaders(headers: any, method: Method): any {
   if (!headers) {
-    return
+    return headers
   }
-  headers = deepMerge(headers.common, headers[method], headers)
+  headers = deepMerge(headers.common || {}, headers[method] || {}, headers)
+
   const methodsToDelete = ['delete', 'get', 'head', 'options', 'post', 'put', 'patch', 'common']
+
   methodsToDelete.forEach(method => {
     delete headers[method]
   })
+
   return headers
 }
