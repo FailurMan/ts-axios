@@ -12,8 +12,8 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     const {
       data = null,
       url,
-      method = 'get',
-      headers,
+      method,
+      headers = {},
       responseType,
       timeout,
       cancelToken,
@@ -28,7 +28,7 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     const request = new XMLHttpRequest()
 
     //xhrReq.open(method, url, async:是否执行异步操作, user:可选的用户名, password:可选的用户名);
-    request.open(method.toUpperCase(), url!, true, null, null)
+    request.open(method!.toUpperCase(), url!, true, null, null)
 
     configureRequest()
 
@@ -121,11 +121,17 @@ export default function xhr(config: AxiosRequestConfig): AxiosPromise {
     //对于取消逻辑的处理
     function processCancel(): void {
       //取消请求
+      /* istanbul ignore next */
       if (cancelToken) {
-        cancelToken.promise.then(reason => {
-          request.abort()
-          reject(reason)
-        })
+        cancelToken.promise
+          .then(reason => {
+            request.abort()
+            reject(reason)
+          })
+          /* istanbul ignore next */
+          .catch(() => {
+            //do nothing
+          })
       }
     }
     //错误处理:处理response的情况

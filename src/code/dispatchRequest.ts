@@ -9,7 +9,15 @@ export default function dispatchRequest(config: AxiosRequestConfig): AxiosPromis
   //处理config
   processConfig(config)
   //请求发送并对data进行处理
-  return xhr(config).then(res => transformResponseData(res))
+  return xhr(config).then(
+    res => transformResponseData(res),
+    e => {
+      if (e && e.response) {
+        e.response = transformResponseData(e.response)
+      }
+      return Promise.reject(e)
+    }
+  )
 }
 //处理config参数
 function processConfig(config: AxiosRequestConfig): void {
@@ -35,6 +43,7 @@ function transformResponseData(res: AxiosResponse): AxiosResponse {
 }
 
 function throwIfCancellationRequeted(config: AxiosRequestConfig): void {
+  /* istanbul ignore next */
   if (config.cancelToken) {
     config.cancelToken.throwIfRequested()
   }

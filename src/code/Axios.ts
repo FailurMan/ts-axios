@@ -39,7 +39,7 @@ export default class Axios {
     }
     //合并默认配置
     config = mergeConfig(this.defaults, config)
-
+    config.method = config.method.toLowerCase()
     const chain: PromiseChain<any>[] = [
       {
         resolved: dispatchRequest,
